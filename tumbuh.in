@@ -1,0 +1,124 @@
+print("================================")
+print("        tumbuh.in 🌱          ")
+print(" Monitoring Nutrisi Hidroponik")
+print("================================") 
+
+while True:
+    # VALIDASI KATEGORI TANAMAN 
+    while True:
+        print("\nPilih Kategori:")
+        print("1. Sayuran")
+        print("2. Buah")
+        
+        try:
+            pilih_kategori = int(input("\nMasukkan pilihan kategori (1/2): "))
+            if pilih_kategori in [1, 2]:
+                break
+            else:
+                print("❌ Pilihan tidak valid! Harap masukkan angka 1 atau 2.")
+        except ValueError:
+            print("❌ Input harus berupa angka (1 atau 2)!")
+
+    # ARRAY (DATA PARAMETER NORMAL TANAMAN)
+    if pilih_kategori == 1:
+        nama_kategori = "Sayuran"
+        daftar_nama = ["Selada", "Bayam", "Brokoli", "Kangkung", "Kubis", "Sawi", "Seledri"]
+        ph_min = [6.0, 6.0, 6.0, 5.5, 6.5, 5.5, 6.5]
+        ph_max = [7.0, 7.0, 6.8, 6.5, 7.0, 6.5, 6.5]
+        ppm_min = [560, 1260, 1960, 1050, 1750, 1050, 1260]
+        ppm_max = [840, 1610, 2450, 1400, 2100, 1400, 1680]
+    else:
+        nama_kategori = "Buah"
+        daftar_nama = ["Cabe", "Tomat", "Timun", "Melon", "Nanas", "Semangka", "Stroberi"]
+        ph_min = [6.0, 6.0, 5.5, 5.5, 5.5, 5.8, 6.0]
+        ph_max = [6.5, 6.5, 5.5, 6.0, 6.0, 5.8, 6.0]
+        ppm_min = [1260, 1400, 1190, 1400, 1400, 1260, 1260]
+        ppm_max = [1540, 3500, 1750, 1750, 1680, 1680, 1540]
+
+    # VALIDASI PILIHAN TANAMAN
+    while True:
+        print(f"\nPilih Jenis {nama_kategori}:")
+        for i in range(len(daftar_nama)):
+            print(f"{i + 1}. {daftar_nama[i]}")
+        
+        try:
+            pilih_tanaman = int(input("\nMasukkan pilihan tanaman (angka): "))
+            if 1 <= pilih_tanaman <= len(daftar_nama):
+                index = pilih_tanaman - 1
+                break
+            else:
+                print(f"❌ Pilihan tidak valid! Masukkan angka antara 1 sampai {len(daftar_nama)}.")
+        except ValueError:
+            print("❌ Input harus berupa angka!")
+
+    # PENGAMBILAN DATA
+    tanaman_pilih = daftar_nama[index]
+    ph_bawah = ph_min[index]
+    ph_atas = ph_max[index]
+    ppm_bawah = ppm_min[index]
+    ppm_atas = ppm_max[index]
+
+    print("\nTanaman Dipilih :", tanaman_pilih)
+
+    # VALIDASI pH DAN ppm (Angka, rentang pH 0-14, ppm tidak negatif)
+    print("\n=== INPUT HASIL PENGUKURAN ===")
+    
+    # Validasi pH (0 s.d 14)
+    while True:
+        try:
+            ph_input = float(input("Masukkan pH Air : "))
+            if 0.0 <= ph_input <= 14.0:
+                break
+            else:
+                print("❌ Nilai pH tidak valid! pH harus berada di rentang 0 sampai 14.")
+        except ValueError:
+            print("❌ Input harus berupa angka desimal (contoh: 6.5)!")
+
+    # Validasi ppm (Tidak boleh negatif)
+    while True:
+        try:
+            ppm_input = int(input("Masukkan ppm Air : "))
+            if ppm_input >= 0:
+                break
+            else:
+                print("❌ Nilai ppm tidak boleh bernilai negatif!")
+        except ValueError:
+            print("❌ Input harus berupa angka bulat!")
+
+    # HASIL ANALISIS
+    print("\n=== HASIL ANALISIS ===")
+    status = "NORMAL"
+
+    if ph_input < ph_bawah:
+        print("❌ pH Terlalu Rendah")
+        status = "PERLU PENYESUAIAN"
+    elif ph_input > ph_atas:
+        print("❌ pH Terlalu Tinggi")
+        status = "PERLU PENYESUAIAN"
+    else:
+        print("✅ pH Normal")
+
+    if ppm_input < ppm_bawah:
+        print("❌ Nutrisi Kurang (ppm Terlalu Rendah)")
+        status = "PERLU PENYESUAIAN"
+    elif ppm_input > ppm_atas:
+        print("❌ Nutrisi Berlebih (ppm Terlalu Tinggi)")
+        status = "PERLU PENYESUAIAN"
+    else:
+        print("✅ Nutrisi Normal")
+
+    print("\nSTATUS TANAMAN :", status)
+
+    # KESIMPULAN DAN SARAN
+    if status == "NORMAL":
+        print("🌱 Kondisi tanaman baik dan sesuai parameter ideal.")
+    else:
+        print("⚠️ Ada parameter yang tidak sesuai!")
+        print(f"💡 Saran: Atur pH air agar berada di rentang {ph_bawah} - {ph_atas}")
+        print(f"💡 Saran: Atur kepekatan nutrisi agar berada di rentang {ppm_bawah} - {ppm_atas} ppm")
+
+    # FITUR PENGULANGAN MONITORING
+    ulang = input("\nApakah ingin melakukan monitoring lagi? (ya/tidak): ").strip().lower()
+    if ulang != 'ya':
+        print("\nTerima kasih telah menggunakan tumbuh.in 🌱!")
+        break
